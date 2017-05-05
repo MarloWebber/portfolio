@@ -1,0 +1,226 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.floatRight {
+  float:right;
+
+}
+
+.fillContainerHeight {
+  
+}
+
+.div-inline{ /*single class same-line solution from http://stackoverflow.com/questions/25288957/bootstrap-getting-dropdown-on-same-line-as-buttons*/
+    display:inline-block;
+}
+
+.inlineParent { /* parent class for same-line solution http://stackoverflow.com/questions/266015/css-floats-how-do-i-keep-them-on-one-line*/
+     white-space: nowrap;
+}
+
+.inlineChild { /*child class for same line solution http://stackoverflow.com/questions/266015/css-floats-how-do-i-keep-them-on-one-line*/
+    display:inline-block;
+ /*   width:300px;  this isn't necessary*/
+    white-space: normal;
+}
+
+.floatDown {
+position:absolute;
+bottom: 0;
+}
+
+       .storeItemTitleText {
+       float:left;
+       }
+
+       .storeItemButton {
+   
+       }
+
+.storeItemArea { /*the place where all the storeItemPanels live*/
+    
+}
+
+.storeItemPanel{ /*styling for the item thumbnail thingy that you see in the store.*/
+min-width: 330px;
+width:30%;
+height: 330px;
+margin:15px;
+float:left;
+position:relative
+}
+
+ .storeItemImage {
+  max-height:200px;
+        max-width:300px;
+        height: auto;
+        width: auto;
+       }
+
+
+.img-northstarUnit{
+ background-image: url("nsUnit.jpg");
+ background-size: cover;
+}
+
+.img-timPGH{
+ background-image: url("tim.jpg");
+background-size: cover;
+   }
+
+.img-nsTrio{
+ background-image: url("nsTrio.jpg");
+background-size: cover;
+   }
+
+   .img-nsBump{
+ background-image: url("nsBump.jpg");
+background-size: cover;
+   }
+
+   .img-laughingShawn{
+ background-image: url("laughingShawn.jpg");
+background-size: cover;
+   }
+
+   .img-circadiaBlood{
+ background-image: url("circadiaBlood.jpg");
+background-size: cover;
+   }
+
+      .img-circadiaTable{
+ background-image: url("circadiaTable.jpg");
+background-size: cover;
+   }
+
+      .img-circadiaArm{
+ background-image: url("circadiaArm.jpg");
+background-size: cover;
+   }
+
+    .img-bottlenoseGlove{
+ background-image: url("bottlenoseGlove.jpg");
+background-size: cover;
+   }
+
+       .img-patch{
+ background-image: url("patch.jpg");
+background-size: cover;
+   }
+
+       .img-sticker{
+ background-image: url("sticker.png");
+background-size: cover;
+   }
+
+   .img-shirt{
+ background-image: url("shirt.jpg");
+background-size: cover;
+   }
+
+   .stretchToFit {
+max-width: 100%;
+height: auto;
+}
+
+.fullHeight{
+	 height:100vh;
+}
+
+
+.white{
+	 color:white;
+}
+
+.smokyBackground {
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.transparent{
+	opacity: 0.5;
+}
+
+.transparentBackground{
+	 background: rgba(255, 255, 255, 0.5); 
+}
+
+@font-face {
+font-family: 'Glyphicons Halflings';
+src: url('../fonts/glyphicons-halflings-regular.eot');
+src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
+ #map {
+        height: 400px;
+        width: 400px;
+       }
+
+
+
+       .marginated {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      margin-left: 15px;
+      margin-right: 15px;
+       }
+
+      
+
+
+/*sidebar CSS from https://www.w3schools.com/howto/howto_js_sidenav.asp */
+
+/* The side navigation menu */
+.sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 120px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+/*
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+*/
+.sidenav .closebtn {}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}

@@ -1,0 +1,12 @@
+{
+  "name": "MySite",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "express": "^3.0.0-alpha4",
+    "jade": "^1.11.0",
+    "mongodb": "^2.2.11",
+    "nib": "^1.1.2",
+    "stylus": "^0.49.3"
+  }
+}

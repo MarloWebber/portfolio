@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+ <div ng-app="websiteApp" ng-controller="websiteController">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- Bootstrap core JavaScript
+      ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--need angular -->
+<script src="bower-components/angular/angular.js"></script>
+<!--need bootstrap -->
+<script src="scripts/js/bootstrap.min.js"></script>
+<!--need boostrap-select for dropdown selects -->
+<script src="bower-components/bootstrap-select/js/bootstrap-select.js"></script>
+<link href="bower-components/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet">
+<link href="bower-components/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+<!--my javascript! -->
+<script type="text/javascript" src="index.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!--  <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+<title>Grindhouse Wetware</title>
+<!-- Bootstrap core CSS -->
+<link href="scripts/css/bootstrap.min.css" rel="stylesheet">
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!--<link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
+<!-- Custom styles for this template -->
+<link href="index.css" rel="stylesheet">
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!-- <script src="../../assets/js/ie-emulation-modes-warning.js"></script>-->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+   <![endif]-->
+
+<body class="">
+   
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  </button>
+                    <a class="navbar-brand" href="#">Grindhouse Wetware</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn" data-toggle="" data-target="#"> Products </button>
+                     
+                        <!--<button type="button" class="btn" id="cartButton"> Cart </button>-->
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn" data-toggle="modal" data-target="#loginModal"> Login </button>
+                        <!--login activates a modal that lets you log in.-->
+                        <button type="button" class="btn collapse" id="cartButton" onclick="toggleNav()"> Cart </button>
+                           </div>
+                    </form>
+                </div>
+                <!--/.navbar-collapse -->
+            </div>
+        </nav>
+        <div class="panel-collapse" id="main">
+            <div class="well ">
+                <div class="container">
+                    <h1>Products</h1>
+                </div>
+            </div>
+            <well class="storeItemArea">
+                <div ng-repeat="item in storeItems">
+                    <div class="panel panel-default storeItemPanel">
+                 
+                        <img ng-src="images/{{item.image}}" class="storeItemImage"> </img>
+                        
+                            <div class="panel-body floatDown">
+                                <b>{{item.name}} </b> </br>
+                                <p> {{item.description}} </p>
+                          
+
+                        <!-- chuck warnings, purchase button, and options on the same line-->
+                        <div class="inlineParent">
+
+
+
+
+                            <button class="btn btn-info storeItemButton inlineChild" ng-click="addToCart(item)"> ${{item.price}} </button>
+
+<select ng-repeat="optionset in item.options" ng-change="" class="inlineChild selectpicker" data-width="fit">
+
+<option   ng-repeat="option in optionset" class="" >{{option}}</option>
+
+</select>
+
+
+
+ <!--
+<div class="btn-group btn-input clearfix">
+  <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown">
+    <span ng-model="item.userPrototype.options[optionset]" data-bind="label">{{optionset[0]}}</span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+<div ng-repeat="option in optionset">
+                                            <li><a href="#">{{option}}</a></li>
+                                        </div>
+
+
+  
+  </ul>
+</div>
+
+  -->
+
+
+
+                            <!-- dropdowns for options 
+                            <div ng-repeat="optionset in item.options" class="inlineChild">
+
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="caret"></span></button>
+
+
+
+                                    <ul class="dropdown-menu">
+                                        <div ng-repeat="option in optionset">
+                                            <li><a href="#">{{option}}</a></li>
+                                        </div>
+                                       
+                                    </ul>
+                                </div>
+
+                            </div>
+
+-->
+
+
+                            <!-- display warnings -->
+                            <div ng-repeat="warning in item.warnings" class="inlineChild">
+                              <button class="btn btn-primary alert-info" ng-if="warning=='implant'"> <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> </button>
+                             <button class="btn btn-warning  alert-warning  " ng-if="warning=='noStock'"> <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> </button>
+                           <button class="btn btn-danger alert-danger " ng-if="warning=='discontinued'"> <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> </button>
+                            </div>
+                        </div>
+
+                        <!--
+                        <div>
+                        <div>
+                        <b class="storeItemTitleText">  {{item.name}} &nbsp;</b>
+                         <div class="alert alert-danger floatRight " ng-if="item.implant"> <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>  </div>
+                          </div>
+                        </div>
+                        <div>
+                          <p> {{item.description}} </p>
+                         <button class="btn btn-info storeItemButton" ng-click="$scope.addToCart(item.name)" > ${{item.price}} </button>
+                        </div>
+                        </div>
+                        
+                        -->
+
+
+
+                          </div>
+                       
+
+
+                    </div>
+            </well>
+            </div>
+            <!--
+               <div class="col-sm-2">
+                <div class="well  threeHundredPixTall">
+                  <div class="well "> 
+                   <button type="button" class="btn btn-danger" >$40</button> Bottlenose 
+                   </div>
+                   </div>
+               </div>
+                  
+               
+               <div class="col-sm-2">
+               <div class="well  img-northstarUnit threeHundredPixTall">
+                <button type="button " class="btn btn-danger" data-toggle="modal" data-target="#myModal" > Northstar V1 </button>
+                   </div>
+               </div>
+               
+                   
+               <div class="col-sm-2">
+               
+                   <div class="well  img-shirt threeHundredPixTall">
+                  <div class="well ">
+                   <button type="button" class="btn btn-info" >$25</button> GHWW Logo Shirt 
+                   </div>
+                 </div>
+                 </div>
+               
+               
+               <div class="col-sm-2">
+                 <div class="well  img-patch threeHundredPixTall"> 
+                  <div class="well ">
+                   <button type="button" class="btn btn-info" >$2</button> GHWW Logo Patch 
+                   </div>
+                    </div>
+               </div>
+               
+               <div class="col-sm-2">
+                   <div class="well img-sticker threeHundredPixTall"> 
+                    <div class="well ">
+                   <button type="button" class="btn btn-info" >$2</button> GHWW Logo Sticker 
+                   </div>
+                    </div>
+                    </div>
+               </div>
+                 </div>
+               -->
+            <!-- retrieve list of products from the database -->
+            <!-- format them into the list of products that you see -->
+        </div>
+        <!--
+            <footer>
+              <p>&copy; 2016 Company, Inc.</p>
+            </footer>
+            </div> 
+            -->
+        <!-- /container -->
+</body>
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-app="websiteApp" ng-controller="websiteController">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+                <h4 class="modal-title" id="myModalLabel"> Login / Register </h4>
+
+                <div class="modal-body">
+                    <div class="well col-sm-8 marginated inlineParent">
+                        <b> Existing User </b> </br>
+                        <div class="inlineChild"> <span> Username: </span> <input type="text" name="login[name]" id="userName" class="floatRight"> </div>
+                        </br>
+                        <div class="inlineChild"> <span> Password: </span> <input type="text" name="login[password]" id="userPassword" class="floatRight"> </div>
+                        </br>
+                        <div class="alert alert-success collapse" role="alert" id="loginSuccessAlert">
+                            <strong>Login successful.</strong>
+                        </div>
+                        <div class="alert alert-danger collapse" role="alert" id="loginFailureAlert">
+                            <strong>Login failed.</strong>
+                        </div>
+
+                        <button id="loginButton"> Log In </button>
+                    </div>
+                    <div class="well col-sm-8 marginated inlineParent">
+                        <b> New User </b> </br>
+                        <div class="inlineChild"> <span> Username: </span> <input type="text" name="user[name]" id="newUserName" class="floatRight"> </div>
+                        </br>
+                        <div class="inlineChild"> <span> Email: </span> <input type="text" name="user[email]" id="newUserEmail" class="floatRight"> </div>
+                        </br>
+
+                        <div class="inlineChild"> <span> Password: </span> <input type="text" name="user[password]" id="newUserPassword" class="floatRight"> </div>
+                        </br>
+                        <div class="inlineChild"> <span> Confirm Password: </span> <input type="text" name="user[confirmPassword]" id="newUserConfirmPassword" class="floatRight"> </div>
+                        </br>
+
+                        <button id="register"> Register </button>
+                        <div class="alert alert-success collapse" role="alert" id="registrationSuccessAlert">
+                            <strong>Registration successful.</strong>
+                            <!-- it succeeds if fields are empty, that's stupid -->
+                        </div>
+                        <div class="alert alert-danger collapse" role="alert" id="registrationFailureAlert">
+                            <strong>Registration failed.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="mySidenav" class="sidenav">
+    <!-- sidebar from https://www.w3schools.com/howto/howto_js_sidenav.asp -->
+
+
+
+    <!-- Use any element to open the sidenav with onclick="openNav()" -->
+    <!-- Add all page content inside the 'main' div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+
+    <div ng-repeat="item in user.cart track by $index">
+        
+
+
+        <div class="panel">
+          <b>{{item.name}}</b> </br>
+          <span>{{item.description}}</span>
+
+        </div>
+
+
+
+    </div>
+
+
+    <button class="btn btn-info storeItemButton inlineChild" ng-click="addToCart(item.name)"> Checkout $total </button>
+
+
+    <!--
+   <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+
+  -->
+</div>
+
+</div>
+</html>
