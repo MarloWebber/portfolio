@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html>
+   <link href="jscoils.css" rel="stylesheet">
+<head>
+<body>
+
+<h2>Qi Calculator</h2> <br/> 
+
+<img class="resize" src="qi measurement setup.jpg" alt="Mountain View">
+
+<form>
+
+
+<p><label class="inputLabel">Coil DC Resistance</label> <input type="number" id="RCoil" value=1> <label class="inputLabel"> &nbsp; Ohms </label>  </p>
+<p><label class="inputLabel">Divider Resistor Resistance &nbsp;&nbsp;&nbsp; </label> <input type="number" id="RStim" value=10> <label class="inputLabel"> &nbsp; Ohms </label> </p>
+ <br/>
+
+
+<b class="sectionHeading">Free Space (Ls)</b>
+<p> <label class="inputLabel">Stimulus Peak Voltage</label> <input type="number" id="VStimLs" value=1> <label class="inputLabel"> &nbsp; V </label> </p>
+
+
+
+<p><label class="inputLabel">Center Peak Voltage</label> <input type="number" id="VCenterLs" value=1> <label class="inputLabel"> &nbsp; V </label> </p>
+<p><label class="inputLabel">Stimulus Frequency</label> <input type="number" id="FStimLs" value=100000> <label class="inputLabel"> &nbsp; Hz </label> </p> <br/>
+
+
+<b class="sectionHeading">Qi Stack (L's)</b>
+<p> <label class="inputLabel">Stimulus Peak Voltage</label> <input type="number" id="VStimLxs" value=1> <label class="inputLabel"> &nbsp; V </label> </p>
+
+
+
+<p><label class="inputLabel">Center Peak Voltage</label> <input type="number" id="VCenterLxs" value=1> <label class="inputLabel"> &nbsp; V </label> </p>
+<p><label class="inputLabel">Stimulus Frequency</label> <input type="number" id="FStimLxs" value=100000> <label class="inputLabel"> &nbsp; Hz </label> </p> <br/>
+
+
+<b class="sectionHeading">Defaults</b> </br>
+<p><label class="inputLabel">Fs, Default 100000, Hertz</label> <input type="number" id="FS" value=100000> <br/></p>
+<p><label class="inputLabel">Fd, Default 1000000, Hertz</label> <input type="number" id="FD" value=1000000> <br/> <br/></p>
+
+</form>
+
+<button class="button" onclick="CalculateInductance()">Calculate</button>
+<button class="button" onclick="LoadExample()">Load Example</button> </br> </br>
+
+<div class="inputLabel">
+<span >Free Space (Ls) Inductance: </span> <span id="Ls"></span> <span class="hideableUnit"> H </span> </br>
+<span>Qi Stack (L's) Inductance: </span> <span id="Lxs"></span>  <span class="hideableUnit"> H </span></br>
+<span>Quality Factor: </span> <span id="Q"></span> </br>
+<span>Qi Receiver Tank C1, Farads: </span> <span id="C1"></span> <span class="hideableUnit"> F </span> </br>
+<span>Qi Receiver Tank C2, Farads:</span> <span id="C2"></span> <span class="hideableUnit"> F </span> </br>
+</div>
+
+<script>
+function LoadExample() {
+	console.log('Loading Examples...');
+	document.getElementById("VStimLs").value = 0.196;
+	document.getElementById("VCenterLs").value = 0.12;
+	document.getElementById("FStimLs").value = 1000000;
+	document.getElementById("VStimLxs").value = 0.204;
+	document.getElementById("VCenterLxs").value = 0.12;
+	document.getElementById("FStimLxs").value = 1000000;
+	document.getElementById("RCoil").value = 2;
+	document.getElementById("RStim").value = 100;
+}
+
+function CalculateInductance() {
+	console.log('Calculating...');
+    var VStimLs = document.getElementById("VStimLs").value;
+    var VCenterLs = document.getElementById("VCenterLs").value;
+    var FStimLs = document.getElementById("FStimLs").value;
+    var VStimLxs = document.getElementById("VStimLxs").value;
+    var VCenterLxs = document.getElementById("VCenterLxs").value;
+    var FStimLxs = document.getElementById("FStimLxs").value;
+    var RCoil = document.getElementById("RCoil").value;
+    var RStim = document.getElementById("RStim").value;
+    var FS = document.getElementById("FS").value;
+    var FD = document.getElementById("FD").value;
+
+	//Voltage Divider Formula, rearranged to solve for top resistance
+	var ImpedanceLs = ((VStimLs*RStim)/VCenterLs) - RStim - RCoil; //This returns the electrical impedance of the coil in free space
+	var ImpedanceLxs = ((VStimLxs*RStim)/VCenterLxs) - RStim - RCoil; //This returns the electrical impedance of the coil on the Qi stack
+
+	//inductive impedance formula: impedance = 2*pi*frequency*inductance
+	//rearranged to solve for inductance: inductance = impedance / (2*pi*frequency)
+	var Ls = ImpedanceLs/(2*Math.PI*FStimLs); //Inductance of coil in free space
+	var Lxs = ImpedanceLxs / (2* Math.PI * FStimLxs); //Inductance of coil on stack
+
+	var Q = (2 * Math.PI * Ls * FStimLs )/ RCoil; //Q quality factor = (2*3.141*f*L)/r
+
+	var C1 = Math.pow((Math.pow((FS*2*Math.PI),2)*Lxs),-1); //Tank cap formulas for BQ51013 Qi receiver chip by Texas Instruments. These formulas were found on the chips' datasheet. This returns the capacitance required for the main series resonant tank
+	var C2 = Math.pow(Math.pow((FD*2*Math.PI),2)*Ls-(1/C1),-1); //Capacitance required for parallel resonant tank
+
+
+	//figure out C1 appropriate display scale- pico, nano, micro
+	console.log(Math.log10(1e-5));
+
+
+console.log(prefixMyNumber(Ls));
+
+
+
+	/*
+
+2.340513868998461e-8 farads
+23n
+-7.63
+
+2.340513868998461e-7 farads
+234 nF
+log10 result = -6.63
+
+
+2.3uF
+-5.63
+
+
+1e-5
+10uF
+-5
+
+2.340513868998461e-5 farads
+23 uF
+log10 result = -4.63
+
+
+
+    */
+
+
+
+
+
+
+
+
+	document.getElementById("Ls").innerHTML = Ls; //return results
+	document.getElementById("Lxs").innerHTML = Lxs;
+	document.getElementById("Q").innerHTML = Q;
+	document.getElementById("C1").innerHTML = C1;
+	document.getElementById("C2").innerHTML = C2;
+
+
+// show units after numbers in results section. they were hidden because the associated numbers hadn't been calculated yet.
+
+/*
+
+this can be used to hide and show elements
+var x = document.getElementById('myDIV');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+
+
+*/
+
+
+function prefixMyNumber(inputNumber) { // it's actually a suffix
+	// takes a number in JS scientific notation, gives you an english-language number and associated units. 
+	// The algorithm behind this was created by my friend Riley Vanderbyl, who is a University of Queensland Mathematics Honours student.
+
+	var positivePrefixes = ["k","M","G","T","P","E","Z","Y"];
+	var negativePrefixes = ["m","u","n","p","f","a","z","y"];
+
+	var prefix = "";
+	var outputNumber = 0;
+
+	var y = (Math.log10( Math.floor(inputNumber))) /3 ;
+
+
+	if (y > positivePrefixes.length ) {
+		y = positivePrefixes.length;
+	}
+
+	else if (y < (-1 * negativePrefixes.length ))  {
+		y = -1 * negativePrefixes.length;
+	}
+
+
+	if (y == 0) {
+		outputNumber = inputNumber;
+	}
+
+	else {
+		outputNumber = inputNumber * (10 ^ (-3 * y));
+		if (y > 0) {
+			prefix = positivePrefixes[y];
+		}
+		if (y < 0) {
+			prefix = negativePrefixes[(-1 * y)];
+		}
+	}
+	return {outputNumber,prefix};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+</script>
+</body>
+</html>

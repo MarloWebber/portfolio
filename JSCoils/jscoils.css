@@ -1,0 +1,133 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.img-qiSetup{
+ background-image: url("qi measurement setup.jpg");
+ background-size: cover;
+}
+
+  form  { display: table;      }
+  p     { display: table-row;  }
+  label { display: table-cell; }
+  input { display: table-cell; }
+
+
+input { 
+    text-align: right; 
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+.sectionHeading {
+color:  #555555;
+font-family: Arial;
+
+}
+
+body {
+  margin: 30px;
+}
+
+h2 {
+color:  #555555;
+font-family: Arial;
+}
+
+.inputDiv {
+  width:50%;
+max-width: 480px;
+float:left;
+}
+
+.outputDiv {
+    width:50%;
+max-width: 480px;
+margin-left:510px;
+}
+
+.topWrapper {
+  width:100%;
+  max-width: 960px;
+}
+
+.centerAlign {
+
+text-align:center;
+
+}
+
+.qiPicture{
+  width:100%;
+    max-width:450px; /* you can use % */
+    height: auto;
+}
+
+.greyLabels {
+color: grey;
+font-family: Arial;
+}
+
+.colorStripe{
+    width: 100%; height: 2em;
+    border-style: solid;
+    border-color: white;
+    background-color: #ffe100;
+    visibility: hidden;
+}
+
+.button {
+    background-color: #555555; /* charcoal */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: Arial;
+}
+
+
+
+   .stretchToFit {
+max-width: 100%;
+height: auto;
+}
+
+.fullHeight{
+	 height:100vh;
+}
+
+
+.white{
+	 color:white;
+}
+
+.smokyBackground {
+    background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.transparent{
+	opacity: 0.5;
+}
+
+.transparentBackground{
+	 background: rgba(255, 255, 255, 0.5); 
+}
+
+
+       .marginated {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      margin-left: 15px;
+      margin-right: 15px;
+       }

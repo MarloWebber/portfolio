@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+   <link href="jscoils.css" rel="stylesheet">
+ 
+<body>
+
+<div class="topWrapper">
+
+<div class="inputDiv">
+
+
+<img class="qiPicture" src="qi measurement setup.jpg" alt="Qi measurement setup">
+
+<form>
+
+<b class="sectionHeading">Resistances</b>
+<p><label class="greyLabels">Coil DC Resistance (Rd)</label> <input type="number" id="RCoil" value=1> <label class="greyLabels"> &nbsp; &Omega; </label>  </p>
+<p><label class="greyLabels">Divider Resistor Resistance (Rl) &nbsp;&nbsp;&nbsp; </label> <input type="number" id="RStim" value=10> <label class="greyLabels"> &nbsp; &Omega; </label> </p>
+ <br/>
+
+
+<b class="sectionHeading">Rx Only</b>
+<p> <label class="greyLabels">Stimulus Peak Voltage (Vs)</label> <input type="number" id="VStimLs" value=1> <label class="greyLabels"> &nbsp; V </label> </p>
+
+
+
+<p><label class="greyLabels">Center Peak Voltage (Vc)</label> <input type="number" id="VCenterLs" value=1> <label class="greyLabels"> &nbsp; V </label> </p>
+<p><label class="greyLabels">Stimulus Frequency</label> <input type="number" id="FStimLs" value=100000> <label class="greyLabels"> &nbsp; Hz </label> </p> <br/>
+
+
+<b class="sectionHeading">Rx on Qi stack</b>
+<p> <label class="greyLabels">Stimulus Peak Voltage (Vs)</label> <input type="number" id="VStimLxs" value=1> <label class="greyLabels"> &nbsp; V </label> </p>
+
+
+
+<p><label class="greyLabels">Center Peak Voltage (Vc)</label> <input type="number" id="VCenterLxs" value=1> <label class="greyLabels"> &nbsp; V </label> </p>
+<p><label class="greyLabels">Stimulus Frequency</label> <input type="number" id="FStimLxs" value=100000> <label class="greyLabels"> &nbsp; Hz </label> </p> <br/>
+
+<!--
+<b class="sectionHeading">Defaults</b> </br>
+<p><label class="greyLabels"> (Fs): </label> <input type="number" id="FS" value=100000> <label class="greyLabels"> &nbsp; Hz </label><br/></p>
+<p><label class="greyLabels"> (Fd): </label> <input type="number" id="FD" value=1000000> <label class="greyLabels"> &nbsp; Hz </label><br/> <br/></p>
+-->
+</form>
+</br>
+
+<div id="buttons" class="centerAlign">
+	<button class="button" onclick="CalculateInductance()">Calculate</button>
+	<button class="button" onclick="LoadExample()">Load Example</button> </br> </br>
+</div>
+</div>
+
+
+<div class="outputDiv">
+<h2 class="">Qi Calculator</h2> 
+<div class="greyLabels">
+<span> For Texas Instruments BQTesla series</span>
+</div>
+ </br>
+
+<b class="sectionHeading">Results</b>
+<div class="greyLabels">
+<span >Free Space Inductance (Ls): </span> <span id="Ls"></span>  </br>
+<span  >Qi Stack Inductance (L's): </span> <span id="Lxs"></span> </br>
+<span  >Quality Factor: </span> <span id="Q"></span> </br>
+<span  >Receiver Series Tank C1: </span> <span id="C1"></span> </br>
+<span  >Receiver Parallel Tank C2: </span> <span id="C2"></span>  </br>
+</div>
+
+</br>
+<div class="colorStripe" id="errorBar">
+<b class=" sectionHeading">Error.</b>
+</div>
+</div>
+</div>
+
+<script>
+
+/*
+var ranges = [
+  { divider: 1e18 , suffix: 'P' },
+  { divider: 1e15 , suffix: 'E' },
+  { divider: 1e12 , suffix: 'T' },
+  { divider: 1e9 , suffix: 'G' },
+  { divider: 1e6 , suffix: 'M' },
+  { divider: 1e3 , suffix: 'k' }
+];
+
+function formatNumber(n) {
+  for (var i = 0; i < ranges.length; i++) {
+    if (n >= ranges[i].divider) {
+      return (n / ranges[i].divider).toString() + ranges[i].suffix;
+    }
+  }
+  return n.toString();
+}
+*/
+
+
+function formatN (n) {
+	//https://gist.github.com/cho45/9968462
+	var nn = n.toExponential(2).split(/e/);
+	var u = Math.floor(+nn[1] / 3);
+	return nn[0] * Math.pow(10, +nn[1] - u * 3) + ['p', 'n', '&mu;', 'm', '', 'k', 'M', 'G', 'T'][u+4];
+}
+
+function error(errorString) {
+	//show the error message
+	document.getElementById("errorBar").style.visibility = 'visible';
+	document.getElementById("errorBar").innerHTML = errorString;
+}
+
+function LoadExample() {
+	console.log('Loading Examples...');
+	document.getElementById("VStimLs").value = 0.196;
+	document.getElementById("VCenterLs").value = 0.12;
+	document.getElementById("FStimLs").value = 1000000;
+	document.getElementById("VStimLxs").value = 0.204;
+	document.getElementById("VCenterLxs").value = 0.12;
+	document.getElementById("FStimLxs").value = 1000000;
+	document.getElementById("RCoil").value = 2;
+	document.getElementById("RStim").value = 100;
+}
+
+function CalculateInductance() {
+	console.log('Calculating...');
+	//hide the error message
+	document.getElementById("errorBar").style.visibility = 'hidden';
+
+
+
+
+    var VStimLs = document.getElementById("VStimLs").value;
+    var VCenterLs = document.getElementById("VCenterLs").value;
+    var FStimLs = document.getElementById("FStimLs").value;
+    var VStimLxs = document.getElementById("VStimLxs").value
+    var VCenterLxs = document.getElementById("VCenterLxs").value;
+    var FStimLxs = document.getElementById("FStimLxs").value;
+    var RCoil = document.getElementById("RCoil").value;
+    var RStim = document.getElementById("RStim").value;
+    var FS = 100000;// document.getElementById("FS").value;
+    var FD = 1000000;//document.getElementById("FD").value;
+
+     if ( isNaN(VStimLs) || isNaN(VCenterLs) || isNaN(FStimLs) || isNaN(VStimLxs) || isNaN(VCenterLxs) || isNaN(FStimLxs) || isNaN(RCoil) || isNaN(RStim) || isNaN(FS) || isNaN(FD) ) {
+    	error("Error: Input isn't a number");
+return;
+    }
+
+    if (VStimLs <= 0 || VCenterLs <= 0 || FStimLs <= 0 || VStimLxs <= 0 || VCenterLxs <= 0 || FStimLxs <= 0 || RCoil <= 0 || RStim <= 0 || FS <= 0 || FD <= 0) {
+    	error("Error: Input less than zero");
+    	return;
+    }
+
+	//Voltage Divider Formula, rearranged to solve for top resistance
+	var ImpedanceLs = ((VStimLs*RStim)/VCenterLs) - RStim - RCoil; //This returns the electrical impedance of the coil in free space
+	var ImpedanceLxs = ((VStimLxs*RStim)/VCenterLxs) - RStim - RCoil; //This returns the electrical impedance of the coil on the Qi stack
+
+	//inductive impedance formula: impedance = 2*pi*frequency*inductance
+	//rearranged to solve for inductance: inductance = impedance / (2*pi*frequency)
+	var Ls = ImpedanceLs/(2*Math.PI*FStimLs); //Inductance of coil in free space
+	var Lxs = ImpedanceLxs / (2* Math.PI * FStimLxs); //Inductance of coil on stack
+
+	var Q = (2 * Math.PI * Ls * FStimLs )/ RCoil; //Q quality factor = (2*3.141*f*L)/r
+
+	var C1 = Math.pow((Math.pow((FS*2*Math.PI),2)*Lxs),-1); //Tank cap formulas for BQ51013 Qi receiver chip by Texas Instruments. These formulas were found on the chips' datasheet. This returns the capacitance required for the main series resonant tank
+	var C2 = Math.pow(Math.pow((FD*2*Math.PI),2)*Ls-(1/C1),-1); //Capacitance required for parallel resonant tank
+
+ if (isNaN(C1)|| isNaN(C2) ||isNaN( Q) ||isNaN( Lxs ) ||isNaN( Ls ) ){
+    	error("Error: Results are not valid numbers. Inputs probably not correct."); return;
+    }
+
+  if (C1 <= 0 || C2 <= 0 || Q <= 0 || Lxs <= 0 || Ls <= 0) {
+    	error("Error: Results less than zero. Inputs probably not correct."); return;
+    }
+
+	//figure out C1 appropriate display scale- pico, nano, micro
+C1 = formatN (C1) + 'F';
+C2 = formatN (C2) + 'F';
+Ls = formatN (Ls) + 'H';
+Lxs = formatN (Lxs) + 'H';
+Q = Q.toFixed(2);
+
+
+if (C1.indexOf("NaN") >= 0) {	error("Error: Results are not valid numbers. Inputs probably not correct.");return;}
+if (C2.indexOf("NaN") >= 0) {	error("Error: Results are not valid numbers. Inputs probably not correct.");return;}
+	if (Ls.indexOf("NaN") >= 0) {	error("Error: Results are not valid numbers. Inputs probably not correct.");return;}
+		if (Lxs.indexOf("NaN") >= 0) {	error("Error: Results are not valid numbers. Inputs probably not correct.");return;}
+			if (Q.indexOf("NaN") >= 0) {	error("Error: Results are not valid numbers. Inputs probably not correct.");return;}
+
+
+	/*
+
+2.340513868998461e-8 farads
+23n
+-7.63
+
+2.340513868998461e-7 farads
+234 nF
+log10 result = -6.63
+
+
+2.3uF
+-5.63
+
+
+1e-5
+10uF
+-5
+
+2.340513868998461e-5 farads
+23 uF
+log10 result = -4.63
+
+
+
+    */
+
+
+
+
+
+
+
+
+	document.getElementById("Ls").innerHTML = Ls; //return results
+	document.getElementById("Lxs").innerHTML = Lxs;
+	document.getElementById("Q").innerHTML = Q;
+	document.getElementById("C1").innerHTML = C1;
+	document.getElementById("C2").innerHTML = C2;
+
+
+// show units after numbers in results section. they were hidden because the associated numbers hadn't been calculated yet.
+
+/*
+
+this can be used to hide and show elements
+var x = document.getElementById('myDIV');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+
+
+*/
+
+
+}
+</script>
+</body>
+</html>
